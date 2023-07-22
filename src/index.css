@@ -38,7 +38,6 @@ body {
   width: 95%;
   max-width: 500px;
   margin: 0px auto;
-  background-color: #fff;
   padding: 10px;
 }
 
@@ -66,7 +65,8 @@ button:focus-visible {
   outline: none;
 }
 
-input {
+input,
+textarea {
   border-radius: 8px;
   border: 1px solid #cfcfcf;
   padding: 0.6em 1.2em;
@@ -76,9 +76,30 @@ input {
   background-color: transparent;
   transition: border-color 0.25s;
 }
-input:hover,
-input:focus {
+
+:is(textarea, input):hover,
+:is(textarea, input):focus {
   border: 1px solid #1a1a1a;
+}
+
+.post-form-container,
+.post-item {
+  padding: 20px;
+  margin-bottom: 30px;
+  background-color: #fff;
+}
+.post-item > p {
+  margin: 15px 0;
+}
+
+.form-item {
+  margin-bottom: 10px;
+}
+.form-item label,
+.form-item input,
+.form-item textarea {
+  display: block;
+  width: 100%;
 }
 
 @media (prefers-color-scheme: light) {

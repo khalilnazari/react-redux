@@ -3,13 +3,6 @@ import { counterSlice } from "../../store/reducers/counterSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 
-const style = {
-  display: "flex",
-  gap: "10px",
-  justifyContent: "center",
-  marginBottom: "20px",
-};
-
 const Counter = () => {
   const dispatch = useDispatch();
   const { counter } = useSelector((state) => state.counter);
@@ -17,11 +10,26 @@ const Counter = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <div style={{ ...style, fontSize: "30px" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          justifyContent: "center",
+          marginBottom: "20px",
+          fontSize: "30px",
+        }}
+      >
         <span>{counter}</span>
       </div>
 
-      <div style={style}>
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          justifyContent: "center",
+          marginBottom: "20px",
+        }}
+      >
         <button onClick={() => dispatch(counterSlice.actions.increment())}>
           Incretement
         </button>
@@ -33,7 +41,14 @@ const Counter = () => {
         </button>
       </div>
 
-      <div style={style}>
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          justifyContent: "center",
+          marginBottom: "20px",
+        }}
+      >
         <input onChange={(e) => setAmount(e.target.value)} />
         <button
           onClick={() => dispatch(counterSlice.actions.addByAmount(amount))}
