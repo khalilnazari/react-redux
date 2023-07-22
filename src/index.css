@@ -31,7 +31,7 @@ a:hover {
 
 body {
   min-height: 100vh;
-  background-color: rgb(236, 236, 236);
+  background-color: rgb(240, 240, 240);
 }
 
 .container {
@@ -59,11 +59,26 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #1a1a1a;
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: none;
+}
+
+input {
+  border-radius: 8px;
+  border: 1px solid #cfcfcf;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: transparent;
+  transition: border-color 0.25s;
+}
+input:hover,
+input:focus {
+  border: 1px solid #1a1a1a;
 }
 
 @media (prefers-color-scheme: light) {

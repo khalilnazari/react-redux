@@ -1,9 +1,12 @@
 import { useState } from "react";
+import Counter from "./features/counter/Counter";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return <div className="container">react-redux app</div>;
+  return (
+    <div className="container">
+      <Counter />
+    </div>
+  );
 }
 
 export default App;
