@@ -1,7 +1,7 @@
-import { Typography } from "@mui/material";
+import Counter from "./components/Counter";
 
 function App() {
-  return <Typography variant="h1">Hello App</Typography>;
+  return <Counter />;
 }
 
 export default App;
