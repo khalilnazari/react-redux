@@ -1,8 +1,8 @@
-import Counter from "./components/Counter";
-import Login from "./pages/auth/Login";
+import { RouterProvider } from "react-router-dom";
+import { routes } from "./routes";
 
 function App() {
-  return <Login />;
+  return <RouterProvider router={routes} />;
 }
 
 export default App;

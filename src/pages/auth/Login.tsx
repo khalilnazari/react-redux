@@ -2,7 +2,7 @@ import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import { controls } from "../../components/form/formControls";
 import FormControl from "../../components/form/FormControl";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../store/hook";
+import { useAppDispatch } from "../../store/hook";
 import { authActions } from "../../store/reducers/authSlice";
 
 type LoginControlType = {
@@ -16,11 +16,6 @@ type LoginControlType = {
 const Login = () => {
   let loginControls: LoginControlType[] = controls.login;
   const dispatch = useAppDispatch();
-  const { token } = useAppSelector((state) => state.auth);
-
-  if (token) {
-    console.log("You are login");
-  }
 
   const [formData, setFormData] = useState<{ email: string; password: string }>(
     { email: "", password: "" }
