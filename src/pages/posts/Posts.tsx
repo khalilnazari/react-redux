@@ -22,7 +22,6 @@ type PostType = {
 
 const PostCard = (post: PostType) => {
   const description = post.description.substring(0, 100);
-  console.log(post.image);
   return (
     <Grid item key={post.id} xs={12} sm={6} md={4} lg={3}>
       <Paper sx={{ padding: "10px 10px 20px 10px", height: "100%" }}>
@@ -90,7 +89,7 @@ const Posts = () => {
         justifyContent="space-between"
       >
         {posts.map((post: PostType) => (
-          <PostCard {...post} />
+          <PostCard key={post.id} {...post} />
         ))}
       </Grid>
     </Container>
