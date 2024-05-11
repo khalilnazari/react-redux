@@ -10,7 +10,14 @@ export const postApi = api.injectEndpoints({
       },
       providesTags: ["Posts"],
     }),
+    getPost: build.query({
+      query(id) {
+        return {
+          url: `posts/${id}`,
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetPostsQuery } = postApi;
+export const { useGetPostsQuery, useGetPostQuery } = postApi;

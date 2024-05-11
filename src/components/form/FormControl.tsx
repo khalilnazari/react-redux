@@ -1,4 +1,9 @@
-import { EmailField, PasswordField } from "./Controls";
+import {
+  EmailField,
+  ParagraphField,
+  PasswordField,
+  StandardTextField,
+} from "./Controls";
 import { controlType } from "./formControls";
 
 const FormControl = (props: any) => {
@@ -10,6 +15,15 @@ const FormControl = (props: any) => {
 
     case controlType.password:
       return <PasswordField {...props} />;
+
+    case controlType.standardTextField:
+      return <StandardTextField {...props} />;
+
+    case controlType.date:
+      return <StandardTextField {...props} />;
+
+    case controlType.paragraph:
+      return <ParagraphField {...props} />;
 
     default:
       return <>incorrect form element</>;
