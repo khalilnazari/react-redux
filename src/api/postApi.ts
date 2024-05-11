@@ -18,6 +18,16 @@ export const postApi = api.injectEndpoints({
       },
       providesTags: ["Posts"],
     }),
+    deletePost: build.mutation({
+      query(data) {
+        const { id } = data;
+        return {
+          url: `posts/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Posts"],
+    }),
     updatePost: build.mutation({
       query(data) {
         const { id, ...body } = data;
@@ -32,5 +42,9 @@ export const postApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetPostsQuery, useGetPostQuery, useUpdatePostMutation } =
-  postApi;
+export const {
+  useGetPostsQuery,
+  useGetPostQuery,
+  useUpdatePostMutation,
+  useDeletePostMutation,
+} = postApi;

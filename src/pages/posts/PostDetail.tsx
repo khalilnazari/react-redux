@@ -6,8 +6,12 @@ import {
   Skeleton,
   Snackbar,
 } from "@mui/material";
-import { useParams } from "react-router-dom";
-import { useGetPostQuery, useUpdatePostMutation } from "../../api/postApi";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  useDeletePostMutation,
+  useGetPostQuery,
+  useUpdatePostMutation,
+} from "../../api/postApi";
 import { controls } from "../../components/form/formControls";
 import FormControl from "../../components/form/FormControl";
 import { ControlType } from "../../components/form/controlType";
@@ -24,10 +28,13 @@ type PostType = {
 const PostDetail = () => {
   let postControls: ControlType[] = controls.post;
   const params = useParams();
+  const navigate = useNavigate();
   const { data: post, isLoading, isError, error } = useGetPostQuery(params.id);
   const [updatePost, { isError: isUpdateError, isLoading: isUpdateLoading }] =
     useUpdatePostMutation();
-  const [formData, setFormData] = useState<PostType | {}>({ id: params.id });
+  const [deletePost, { isError: isDeleteError, isLoading: isDeleteLoading }] =
+    useDeletePostMutation();
+  const [formData, setFormData] = useState<PostType | {}>({});
   const [postToControl, setPostToControl] = useState(true);
   let isUpdateEnabled = false;
 
@@ -59,8 +66,12 @@ const PostDetail = () => {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log(formData);
-    updatePost(formData);
+    updatePost({ ...formData, id: post.id });
+  };
+
+  const handleDelete = async (id: number) => {
+    await deletePost({ id });
+    navigate("/posts");
   };
 
   if (isLoading) {
@@ -92,13 +103,32 @@ const PostDetail = () => {
         />
       )}
 
+      {isDeleteError && (
+        <Snackbar
+          open={true}
+          autoHideDuration={5000}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          message="Couldn't delete. try again.."
+          color="error"
+        />
+      )}
+
       <form onSubmit={handleSubmit}>
         {postControls.map((control) => (
           <Box sx={{ marginBottom: "20px" }} key={control.id}>
             <FormControl {...control} handleChange={handleChange} />
           </Box>
         ))}
-        <Box>
+        <Box sx={{ display: "flex", gap: "10px" }}>
+          <Button
+            type="submit"
+            variant="outlined"
+            onClick={() => handleDelete(post.id)}
+            sx={{ padding: "15px 30px" }}
+            disabled={isDeleteLoading}
+          >
+            {isDeleteLoading ? "deleting..." : "Delete"}
+          </Button>
           <Button
             type="submit"
             variant="contained"
