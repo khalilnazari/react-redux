@@ -39,6 +39,16 @@ export const postApi = api.injectEndpoints({
       },
       invalidatesTags: ["Posts"],
     }),
+    createPost: build.mutation({
+      query(body) {
+        return {
+          url: `posts`,
+          method: "POST",
+          body,
+        };
+      },
+      invalidatesTags: ["Posts"],
+    }),
   }),
 });
 
@@ -47,4 +57,5 @@ export const {
   useGetPostQuery,
   useUpdatePostMutation,
   useDeletePostMutation,
+  useCreatePostMutation,
 } = postApi;

@@ -12,54 +12,43 @@ import {
   useGetPostQuery,
   useUpdatePostMutation,
 } from "../../api/postApi";
-import { controls } from "../../components/form/formControls";
 import FormControl from "../../components/form/FormControl";
 import { ControlType } from "../../components/form/controlType";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { useAppSelector } from "../../store/hook";
+import { isFormDataChanged, mapDataToControls } from "../../utils/formUtils";
 
-type PostType = {
+export type PostType = {
   title?: string | undefined;
   description?: string | undefined;
   image?: string | undefined;
   createdAt?: string | undefined;
   id?: number;
 };
+let postControlsWithValue: ControlType[] = [];
 
 const PostDetail = () => {
-  let postControls: ControlType[] = controls.post;
+  const postControls = JSON.parse(
+    JSON.stringify(useAppSelector((state) => state.formControls.postControls))
+  );
+
+  // hooks
   const params = useParams();
   const navigate = useNavigate();
+
+  // API functions
   const { data: post, isLoading, isError, error } = useGetPostQuery(params.id);
   const [updatePost, { isError: isUpdateError, isLoading: isUpdateLoading }] =
     useUpdatePostMutation();
   const [deletePost, { isError: isDeleteError, isLoading: isDeleteLoading }] =
     useDeletePostMutation();
+
+  // status
   const [formData, setFormData] = useState<PostType | {}>({});
   const [postToControl, setPostToControl] = useState(true);
   let isUpdateEnabled = false;
 
-  const addPostToControls = (data: any) => {
-    postControls = postControls.map((control) => {
-      Object.keys(data).map((key) => {
-        if (control.name === key) {
-          // @ts-ignore
-          control.value = data[key];
-        }
-      });
-
-      return control;
-    });
-  };
-
-  if (!isError && !isLoading && postToControl) {
-    addPostToControls(post);
-    setPostToControl(false);
-  }
-
-  if (Object.keys(formData).length > 0) {
-    addPostToControls(formData);
-  }
-
+  // functions
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -86,10 +75,26 @@ const PostDetail = () => {
   }
 
   if (isError) {
-    <Container>{JSON.stringify(error)}</Container>;
+    return <Container>{JSON.stringify(error)}</Container>;
   }
 
-  isUpdateEnabled = isUpdated(post, formData);
+  if (postToControl) {
+    console.log("only first time");
+    postControlsWithValue = mapDataToControls<PostType, ControlType>(
+      post,
+      postControls
+    );
+    setPostToControl(false);
+  }
+
+  if (Object.keys(formData).length > 0) {
+    postControlsWithValue = mapDataToControls<PostType, ControlType>(
+      formData,
+      postControlsWithValue
+    );
+  }
+
+  isUpdateEnabled = isFormDataChanged<PostType>(post, formData);
 
   return (
     <Container maxWidth="md">
@@ -114,28 +119,40 @@ const PostDetail = () => {
       )}
 
       <form onSubmit={handleSubmit}>
-        {postControls.map((control) => (
-          <Box sx={{ marginBottom: "20px" }} key={control.id}>
-            <FormControl {...control} handleChange={handleChange} />
-          </Box>
-        ))}
+        {postControlsWithValue.map((control) => {
+          return (
+            <Box sx={{ marginBottom: "20px" }} key={control.id}>
+              <FormControl {...control} handleChange={handleChange} />
+            </Box>
+          );
+        })}
+
         <Box sx={{ display: "flex", gap: "10px" }}>
           <Button
             type="submit"
             variant="outlined"
             onClick={() => handleDelete(post.id)}
-            sx={{ padding: "15px 30px" }}
+            sx={{ width: "150px" }}
             disabled={isDeleteLoading}
           >
-            {isDeleteLoading ? "deleting..." : "Delete"}
+            {isDeleteLoading ? <CircularProgress size={22} /> : "Delete"}
           </Button>
           <Button
             type="submit"
             variant="contained"
-            sx={{ padding: "15px 30px" }}
+            sx={{ width: "150px" }}
             disabled={!isUpdateEnabled}
           >
-            {isUpdateLoading ? "upading..." : "Update"}
+            {isUpdateLoading ? (
+              <CircularProgress
+                sx={{
+                  color: "#fff",
+                }}
+                size={22}
+              />
+            ) : (
+              "Update"
+            )}
           </Button>
         </Box>
       </form>
@@ -144,22 +161,3 @@ const PostDetail = () => {
 };
 
 export default PostDetail;
-
-function isUpdated(postData: any, formData: any) {
-  const postStr: string[] = [];
-  const formStr: string[] = [];
-
-  Object.keys(postData).forEach((postKey) => {
-    Object.keys(formData).forEach((formKey) => {
-      if (postKey === formKey) {
-        postStr.push(postData[postKey]);
-        formStr.push(formData[formKey]);
-      }
-    });
-  });
-
-  if (postStr.join("") === formStr.join("")) {
-    return false;
-  }
-  return true;
-}

@@ -9,7 +9,7 @@ export const EmailField = (props: any) => {
       label={label}
       type="email"
       autoComplete={autoComplete}
-      value={value}
+      value={value || ""}
       onChange={handleChange}
       fullWidth
       InputProps={{
@@ -28,7 +28,7 @@ export const PasswordField = (props: any) => {
       label={label}
       type="password"
       autoComplete={autoComplete}
-      value={value}
+      value={value || ""}
       onChange={handleChange}
       fullWidth
       InputProps={{
@@ -47,7 +47,7 @@ export const StandardTextField = (props: any) => {
       label={label}
       type="text"
       autoComplete={autoComplete}
-      value={value}
+      value={value || ""}
       onChange={handleChange}
       fullWidth
       InputProps={{

@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useGetPostsQuery } from "../../api/postApi";
 import { Link } from "react-router-dom";
+import CreatePost from "./CreatePost";
 
 type PostType = {
   createdAt: string;
@@ -81,13 +82,20 @@ const Posts = () => {
 
   return (
     <Container>
-      <Grid
-        container
-        spacing={5}
-        alignContent="stretch"
-        direction="row"
-        justifyContent="space-between"
+      {/* <CreatePost /> */}
+      <Box
+        sx={{
+          border: "1px solid #eee",
+          padding: "10px",
+          borderRadius: "4px",
+          marginBottom: "10px",
+        }}
       >
+        <Button variant="outlined" component={Link} to="/posts/create">
+          Create Post
+        </Button>
+      </Box>
+      <Grid container spacing={5} alignContent="stretch" direction="row">
         {posts.map((post: PostType) => (
           <PostCard key={post.id} {...post} />
         ))}

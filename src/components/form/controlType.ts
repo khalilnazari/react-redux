@@ -3,7 +3,7 @@ export type ControlType = {
   name: string;
   type: string;
   dataType: string | undefined;
-  value?: string | undefined;
+  value?: string | number | undefined;
   range?: (number | string)[] | undefined;
   label?: string;
   autoComplete?: string | undefined;
